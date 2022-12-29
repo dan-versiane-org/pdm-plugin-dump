@@ -6,9 +6,26 @@ handle::dump::backup() {
   local DUMP_OUTPUT_PATH="${PDM_WORKSPACE_CURRENT_ROOT}/backup"
   # TODO: add pass to env
   local DUMP_ZIP_PASS="PASS123"
+  local prefix
+  local suffix
+
+  for ARG in ${@}; do
+    case "${ARG}" in
+      --prefix=*)
+        _TMP_RESULT=""
+        IFS="=" read -a _TMP_RESULT <<< "$ARG"
+        prefix="${_TMP_RESULT[1]}_"
+        ;;
+      --suffix=*)
+        _TMP_RESULT=""
+        IFS="=" read -a _TMP_RESULT <<< "$ARG"
+        suffix="_${_TMP_RESULT[1]}"
+        ;;
+    esac
+  done
 
   local now=$(date +"%Y%m%d%H%M%S")
-  local outputZipFile="${now}.zip"
+  local outputZipFile="${prefix}${now}${suffix}.zip"
   local outputZipFull="${DUMP_OUTPUT_PATH}/${outputZipFile}"
   local config=$(cat $DUMP_CONFIG_FILE)
   local files=""
@@ -25,4 +42,4 @@ handle::dump::backup() {
   cd - >/dev/null 2>&1
 }
 
-handle::dump::backup
+handle::dump::backup ${@}
