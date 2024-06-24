@@ -38,7 +38,7 @@ handle::dump::backup() {
 
   mkdir -p ${DUMP_OUTPUT_PATH}
   cd "${PDM_WORKSPACE_CURRENT_ROOT}/projects"
-  zip --password "${DUMP_ZIP_PASS}" "${outputZipFull}" ${files}
+  zip -r --password "${DUMP_ZIP_PASS}" "${outputZipFull}" ${files}
   cd - >/dev/null 2>&1
 }
 
